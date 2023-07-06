@@ -1,11 +1,7 @@
 import { UserEntity } from './interfaces';
 
-export const User = (
-  id: number,
-  name: string,
-  email: string,
-  createdAt: Date,
-  updatedAt: Date,
-): UserEntity => {
-  return { id, name, email, createdAt, updatedAt };
+export const User = {
+  createOf(name: string, email: string): Partial<UserEntity> {
+    return { name, email };
+  },
 };
