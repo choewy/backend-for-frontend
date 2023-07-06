@@ -1,15 +1,24 @@
+import { User } from '../entities';
 import { UserRepository } from '../repositories';
 
 export const UserService = () => {
   const userRepository = UserRepository();
 
-  const getUsers = async () => {
-    return userRepository.find({});
+  const getList = async () => {
+    return userRepository.find();
   };
 
-  const getUserById = async (id: number) => {
+  const getById = async (id: number) => {
     return userRepository.findOne({ id });
   };
 
-  return { getUsers, getUserById };
+  const hasByEmail = async (email: string) => {
+    return !!(await userRepository.findOne({ email }));
+  };
+
+  const create = async (name: string, email: string) => {
+    return userRepository.insert(User.createOf(name, email));
+  };
+
+  return { getList, getById, hasByEmail, create };
 };

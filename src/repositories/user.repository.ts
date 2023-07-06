@@ -54,8 +54,8 @@ export const UserRepository = (): BaseRepositoryImpl<UserEntity> => {
     return row || null;
   };
 
-  const insert = async (entity: UserEntity): Promise<boolean> => {
-    if (entity.id > 0) {
+  const insert = async (entity: Partial<UserEntity>): Promise<boolean> => {
+    if (entity.id) {
       return false;
     }
 
@@ -63,7 +63,7 @@ export const UserRepository = (): BaseRepositoryImpl<UserEntity> => {
     entity.createdAt = new Date();
     entity.updatedAt = new Date();
 
-    database.users.rows.push(entity);
+    database.users.rows.push(entity as UserEntity);
 
     return true;
   };
