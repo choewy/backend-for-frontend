@@ -1,6 +1,6 @@
 import { createApp, useRouters } from './app';
 import { Config } from './core';
-import { AppRouter } from './routers';
+import { AppRouter, UserRouter } from './routers';
 
 const bootstrap = async () => {
   const config = Config();
@@ -10,7 +10,7 @@ const bootstrap = async () => {
 
   const app = createApp();
 
-  useRouters(app, AppRouter);
+  useRouters(app, AppRouter, UserRouter);
 
   app.listen(port, host, () => {
     console.log(`express server running on port ${port}`);
