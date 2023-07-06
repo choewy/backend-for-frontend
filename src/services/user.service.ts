@@ -7,5 +7,9 @@ export const UserService = () => {
     return userRepository.find({});
   };
 
-  return { getUsers };
+  const getUserById = async (id: number) => {
+    return userRepository.findOne({ id });
+  };
+
+  return { getUsers, getUserById };
 };
