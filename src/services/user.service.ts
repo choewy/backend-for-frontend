@@ -20,5 +20,9 @@ export const UserService = () => {
     return userRepository.insert(User.createOf(name, email));
   };
 
-  return { getList, getById, hasByEmail, create };
+  const updateById = async (id: number, name?: string, email?: string) => {
+    return userRepository.update({ id }, { name, email });
+  };
+
+  return { getList, getById, hasByEmail, create, updateById };
 };

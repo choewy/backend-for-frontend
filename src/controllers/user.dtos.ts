@@ -41,3 +41,22 @@ export const CreateUserDto = (body: any) => {
 
   return { name, email };
 };
+
+export const UpdateUserDto = (body: any) => {
+  if (
+    body.email &&
+    !/^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/.test(body.email)
+  ) {
+    throw BadRequestError('invalid email format');
+  }
+
+  const email = body.email as string | undefined;
+
+  if (body.name && !/^[가-힣]{2,4}$/.test(body.name)) {
+    throw BadRequestError('invalid name format');
+  }
+
+  const name = body.name as string | undefined;
+
+  return { name, email };
+};

@@ -70,7 +70,7 @@ export const UserRepository = (): BaseRepositoryImpl<UserEntity> => {
 
   const update = async (
     conditions: Partial<UserEntity>,
-    data: UserEntity,
+    data: Partial<UserEntity>,
   ): Promise<boolean> => {
     let affectedRows = 0;
 
@@ -89,7 +89,10 @@ export const UserRepository = (): BaseRepositoryImpl<UserEntity> => {
 
       affectedRows += 1;
 
-      return Object.assign(row, data);
+      row = Object.assign(row, data);
+      row.updatedAt = new Date();
+
+      return row;
     });
 
     return affectedRows > 0;

@@ -3,7 +3,7 @@ import { Handler } from 'express';
 import { BadRequestError, HttpError, NotFoundError } from '../core';
 import { UserService } from '../services';
 
-import { CreateUserDto, GetUserParamsDto } from './user.dtos';
+import { CreateUserDto, GetUserParamsDto, UpdateUserDto } from './user.dtos';
 
 export const UserController = () => {
   const userService = UserService();
@@ -54,7 +54,40 @@ export const UserController = () => {
     }
   };
 
-  const updateUser: Handler = (req, res, next) => {};
+  /** 
+   * @test curl -X PATCH http://localhost:4000/users/1 \
+    -H "Content-Type: application/json" \
+    -d '{"email":"choewy32@github.io", "name":"최원영"}'
+  */
+  const updateUser: Handler = async (req, res, next) => {
+    try {
+      const params = GetUserParamsDto(req.params);
+      const body = UpdateUserDto(req.body);
+
+      const user = await userService.getById(params.id);
+
+      if (!user) {
+        throw NotFoundError('not found user');
+      }
+
+      if (
+        body.email &&
+        user.email !== body.email &&
+        (await userService.hasByEmail(body.email))
+      ) {
+        throw BadRequestError('already exist email');
+      }
+
+      await userService.updateById(params.id, body.name, body.email);
+
+      res.status(201).send();
+    } catch (e) {
+      const error = e as HttpError;
+
+      res.status(error.status).send(error);
+    }
+  };
+
   const deleteUser: Handler = (req, res, next) => {};
 
   return { getUsers, getUser, createUser, updateUser, deleteUser };
