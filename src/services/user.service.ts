@@ -12,6 +12,10 @@ export const UserService = () => {
     return userRepository.findOne({ id });
   };
 
+  const hasById = async (id: number) => {
+    return !!(await userRepository.findOne({ id }));
+  };
+
   const hasByEmail = async (email: string) => {
     return !!(await userRepository.findOne({ email }));
   };
@@ -24,5 +28,17 @@ export const UserService = () => {
     return userRepository.update({ id }, { name, email });
   };
 
-  return { getList, getById, hasByEmail, create, updateById };
+  const deleteById = async (id: number) => {
+    return userRepository.delete({ id });
+  };
+
+  return {
+    getList,
+    getById,
+    hasById,
+    hasByEmail,
+    create,
+    updateById,
+    deleteById,
+  };
 };

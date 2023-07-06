@@ -46,7 +46,7 @@ export const UserController = () => {
 
       await userService.create(body.name, body.email);
 
-      res.status(201).send();
+      res.sendStatus(201);
     } catch (e) {
       const error = e as HttpError;
 
@@ -59,7 +59,7 @@ export const UserController = () => {
     -H "Content-Type: application/json" \
     -d '{"email":"choewy32@github.io", "name":"최원영"}'
   */
-  const updateUser: Handler = async (req, res, next) => {
+  const updateUser: Handler = async (req, res, __) => {
     try {
       const params = GetUserParamsDto(req.params);
       const body = UpdateUserDto(req.body);
@@ -80,7 +80,7 @@ export const UserController = () => {
 
       await userService.updateById(params.id, body.name, body.email);
 
-      res.status(201).send();
+      res.sendStatus(204);
     } catch (e) {
       const error = e as HttpError;
 
@@ -88,7 +88,24 @@ export const UserController = () => {
     }
   };
 
-  const deleteUser: Handler = (req, res, next) => {};
+  /** @test curl -X DELETE http://localhost:4000/users/1 */
+  const deleteUser: Handler = async (req, res, next) => {
+    try {
+      const params = GetUserParamsDto(req.params);
+
+      if (!(await userService.hasById(params.id))) {
+        throw NotFoundError('not found user');
+      }
+
+      await userService.deleteById(params.id);
+
+      res.sendStatus(204);
+    } catch (e) {
+      const error = e as HttpError;
+
+      res.status(error.status).send(error);
+    }
+  };
 
   return { getUsers, getUser, createUser, updateUser, deleteUser };
 };
