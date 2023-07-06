@@ -3,7 +3,7 @@ import { RouterImpl } from './interfaces';
 import { AppController } from '../controllers';
 
 export const AppRouter: RouterImpl = () => {
-  const prefix = '/app';
+  const prefix = '/';
   const router = Router();
 
   const appController = AppController();
