@@ -5,7 +5,11 @@ import { ConfigService } from './core';
 import { Logger } from './utils';
 
 export class App {
-  public static create() {
+  private static APP_NAME = 'backend-for-frontend';
+
+  public static async create() {
+    Logger.forRoot(this.APP_NAME);
+
     return new App();
   }
 

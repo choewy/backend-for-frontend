@@ -1,11 +1,22 @@
 import { LogColor, LogType } from './enums';
 
 export class Logger {
-  public static of(context?: string) {
-    return new Logger(context);
+  private static APP_NAME: string = Logger.name;
+
+  public static forRoot(appName: string): typeof Logger {
+    this.APP_NAME = appName;
+
+    return this;
   }
 
-  constructor(public readonly context?: string) {}
+  public static of(context?: string) {
+    return new Logger(this.APP_NAME, context);
+  }
+
+  constructor(
+    public readonly appName: string,
+    public readonly context?: string,
+  ) {}
 
   private makeForm(
     type: LogType,
@@ -14,7 +25,7 @@ export class Logger {
     params?: object,
   ): string {
     const form: string[] = [
-      `[${type.toUpperCase()}]`,
+      `[${this.appName}] - [${type.toUpperCase()}]`,
       new Date().toLocaleString(),
     ];
 
