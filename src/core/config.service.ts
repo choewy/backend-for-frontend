@@ -2,8 +2,14 @@ import 'dotenv/config';
 import { ListenOptions } from './interfaces';
 
 export class ConfigService {
+  private static instance: ConfigService | undefined;
+
   public static of() {
-    return new ConfigService();
+    if (!this.instance) {
+      this.instance = new ConfigService();
+    }
+
+    return this.instance;
   }
 
   private readonly TZ = process.env.TZ;
